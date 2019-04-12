@@ -1,0 +1,14 @@
+{
+  "name": "housequake",
+  "version": "0.0.0",
+  "description": "Acquire and manage rental property",
+  "main": "server.js",
+  "repository": "",
+  "author": "John Drake <johnmdrake@gmail.com>",
+  "dependencies": {
+    "async": "~0.2.8",
+    "express": "~3.2.4",
+    "pouchdb-find": "^6.4.3",
+    "socket.io": "~0.9.14"
+  }
+}
