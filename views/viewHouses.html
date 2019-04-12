@@ -1,0 +1,84 @@
+<!-- The Modal -->
+<div id="mdlVerifyDelete" class="w3-modal">
+	<div class="w3-modal-content">
+		<div class="w3-container">
+			<input type="hidden" id="houseid"/>
+			<p>Are you sure you want to delete house <span id="number"></span> ?</p>
+			<p>
+				<button id="btnConfirmDelete">Yes</button><button id="btnCancelDelete">No</button>
+			</p>
+		</div>
+	</div>
+</div>
+
+<table id="frmHouse">
+	<tr>
+		<td>
+			<input id="housefile" type="file" onchange="previewFile()"><br>
+			<img class="icso" id="housepic" width="120px" src="./views/cliparthouse.jpg" alt="Image preview...">
+		</td>   
+		<td>
+			<div>
+				Number: <br><input class="w490" id="newnumber" placeholder="number">        
+			</div>
+			<div>
+				Address:<br><textarea id="newaddress" class="w490">             
+				</textarea>
+			</div>          
+		</td>
+	<tr>
+	<tr>
+		<td>
+			<input id="btnAddHouse" 
+						 type="button" 
+						 class="tac w200 h40 green mt10 br100" 
+						 value="Save and add" />
+		</td>      
+	</tr>
+	<tr>
+		<td>
+			<input id="btnToggleAllNotes" 
+						 type="button" 
+						 class="tac w200 h40 green mt10 br100" 
+						 value="Toggle Notes" />
+		</td>      
+	</tr>	
+</table>  
+<style>
+	.editfield {
+		display : none;
+	}
+</style>
+<table id="lstHouses">
+	<tbody>
+		<tr id="tmplHouse">
+			<input id="_id" type="hidden">
+			<td>
+				<span class="displayfield">
+					<button class="btnDelete"><i class="fas fa-trash"></i></button>
+					<button class="btnEdit"><i class="fas fa-edit"></i></button>
+				</span>
+				<span class="editfield"><button id="buttonSave" class="btnSave">Save</button></span>
+			</td>
+			<td style="width:10%">
+				<img class="ico" id="housepic" src="./views/cliparthouse.jpg">
+				<span class="editfield">
+					<label for="editimage" class="fas fa-camera"></label>
+					<input id="editimage" type="file" class="editimage w3-hide">
+				</span>
+			</td>
+			<td style="width:5%">
+				<label id="number" class="displayfield"></label>
+				<span class="editfield"><input id="numberfield" size="5"></span>
+			</td>
+			<td style="width:40%">
+				<label id="address" class="displayfield"></label><span class="editfield"><input id="addressfield" size="50"></span>
+			</td>
+			<td style="width:35%">
+				<button class="btnToggleNotes">Notes</button>
+				<div id="notes" class="w3-hide notesDiv displayfield"></div>
+				<span class="editfield"><textarea id="notesfield"></textarea></span>
+			</td>			
+		</tr>
+	</tbody>
+</table>

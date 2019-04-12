@@ -1,0 +1,41 @@
+<!-- The Modal -->
+<div id="mdlVerifyDelete" class="w3-modal">
+	<div class="w3-modal-content">
+		<div class="w3-container">
+			<input type="hidden" id="houseid"/>
+			<p>Are you sure you want to delete house <span id="number"></span> ?</p>
+			<p>
+				<button id="btnConfirmDelete">Yes</button><button id="btnCancelDelete">No</button>
+			</p>
+		</div>
+	</div>
+</div>
+
+
+<div class="w3-container">
+	<div class="w3-card-4 w3-white">
+		<div class="w3-row" id="parentheader" style="display:none"><label id="header"></label><button id="btnUpLevel"><i class="fa fa-level-up"></i></button></div>
+		<div class="w3-card">
+			<img src="./views/cliparthouse.jpg" style="max-width:500px">
+			<div class="w3-container">Number : <input placeholder="Number" style="width:10%; height:20px" id="newnumber"/></div>
+			<div class="w3-container">Address : <input placeholder="Address" style="width:70%; height:20px" id="newaddress" onchange="viewsHousesAddHouse();"/></div>
+		</div>		
+		<div id="lstHouses">
+			<div class="w3-card" id="tmplHouse">
+				<img src="./views/cliparthouse.jpg" style="max-width:500px">
+				<div class="w3-container">
+					<div class="editlabel" style="width:10%; height:20px">
+						Number :
+						<label id="number">Number</label>
+				        <input id="numberfield" class="numberfield" style="width: 50; display:none" />					
+					</div>
+					<div class="editlabel" style="width:70%; height:20px">
+						Address :
+				        <label id="address">Address</label>
+				        <input id="addressfield" class="addressfield" style="width: 50%; display:none" />
+					</div>
+				</div>
+			</div>	
+		</div>
+	</div>
+</div>
