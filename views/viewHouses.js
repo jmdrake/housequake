@@ -44,7 +44,7 @@ function viewsHouseListInit() {
     $(".btnDelete").on("click", function(event){
         var houseDiv = $(this).parent().parent().parent();
         var id = houseDiv.find("#_id").val();
-        ctrlsHousesGetHouseList(id, function(results){
+        ctrlsHousesGetHouse(id, function(results){
             var r = confirm("Delete this house?");
             if (r == true) {
                 ctrlsHousesGetHouse(id, function(house){
