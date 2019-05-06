@@ -138,7 +138,8 @@ function showHouses() {
         });
         viewsEditlabelInit();
         viewsHouseListInit();
-        $("#newnumber").val(parseInt(houseList[houseList.length - 1].number) + 1);
+        if(houseList instanceof Array && houseList.length > 0)
+            $("#newnumber").val(parseInt(houseList[houseList.length - 1].number) + 1);
     });
 }
 
