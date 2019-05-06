@@ -11,18 +11,33 @@
 	</div>
 </div>
 
+<div id="houseimage" class="w3-modal">
+<div class="w3-modal-content">
+  <div class="w3-container">
+    <span onclick="document.getElementById('houseimage').style.display='none'" class="w3-button w3-display-topright">&times;</span>
+	<img id="housepiclarge" src="./views/cliparthouse.jpg" width="100%">
+  </div>
+</div>
+</div>
+
+
+
+
 <table id="frmHouse">
 	<tr>
 		<td>
 			<input id="housefile" type="file" onchange="previewFile()"><br>
-			<img class="icso" id="housepic" width="120px" src="./views/cliparthouse.jpg" alt="Image preview...">
+			<img id="housepic" width="120px" src="./views/cliparthouse.jpg" alt="Image preview...">
 		</td>   
 		<td>
 			<div>
 				Number: <br><input class="w490" id="newnumber" placeholder="number">        
 			</div>
 			<div>
-				Address:<br><textarea id="newaddress" class="w490">             
+				Address: <br><input class="w490" id="newaddress" placeholder="address">        
+			</div>
+			<div>
+				Notes:<br><textarea id="newnotes" class="w490">             
 				</textarea>
 			</div>          
 		</td>
@@ -49,6 +64,7 @@
 		display : none;
 	}
 </style>
+<h2>My House List</h2>
 <table id="lstHouses">
 	<tbody>
 		<tr id="tmplHouse">
@@ -61,7 +77,7 @@
 				<span class="editfield"><button id="buttonSave" class="btnSave">Save</button></span>
 			</td>
 			<td style="width:10%">
-				<img class="ico" id="housepic" src="./views/cliparthouse.jpg">
+				<button class="previewimg"><img class="ico" id="housepic" src="./views/cliparthouse.jpg"></button>
 				<span class="editfield">
 					<label for="editimage" class="fas fa-camera"></label>
 					<input id="editimage" type="file" class="editimage w3-hide">
@@ -76,8 +92,9 @@
 			</td>
 			<td style="width:35%">
 				<button class="btnToggleNotes">Notes</button>
-				<div id="notes" class="w3-hide notesDiv displayfield"></div>
-				<span class="editfield"><textarea id="notesfield"></textarea></span>
+				<!-- <div id="notes" class="w3-hide notesDiv displayfield"></div>
+				<span class="editfield"><textarea id="notesfield" cols="30" rows="4"></textarea></span>-->
+				<textarea class="w3-hide notesDiv" id="notes" cols="30" rows="4" disabled></textarea>
 			</td>			
 		</tr>
 	</tbody>

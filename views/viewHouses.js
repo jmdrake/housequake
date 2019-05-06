@@ -7,39 +7,29 @@ $("#houses").load("./views/viewHouses.html", function(){
 });
 
 function viewsHouseListInit() {
-    $(".numberfield").on("change", function(event){
-        var houseDiv = $(this).parent().parent();
-        var id = houseDiv.find("#_id").val();
-        ctrlsHousesGetHouse(id, function(house){
-            house["number"] = houseDiv.find("#numberfield").val();
-            ctrlsHousesUpdateTask(house);
-        });
-    });
-
-    $(".addressfield").on("change", function(event){
-        var houseDiv = $(this).parent().parent();
-        var id = houseDiv.find("#_id").val();
-        ctrlsHousesGetHouse(id, function(house){
-            house["address"] = houseDiv.find("#addressfield").val();
-            ctrlsHousesUpdateTask(house);
-        });
-    });
-
     $(".btnSave").on("click", function(event){
         var houseDiv = $(this).parent().parent().parent();
         var id = houseDiv.find("#_id").val();
+        var file = houseDiv.find(".editimage").prop("files")[0];
         ctrlsHousesGetHouse(id, function(house){
             house["address"] = houseDiv.find("#addressfield").val();
             house["number"] = houseDiv.find("#numberfield").val();
-            house["notes"] = houseDiv.find("#notesfield").val();
+            house["notes"] = houseDiv.find("#notes").val();
             houseDiv.find("#address").html(house["address"]);
             houseDiv.find("#number").html(house["number"]);
             houseDiv.find("#notes").html(house["notes"]);
-            ctrlsHousesUpdateHouse(house);
+            ctrlsHousesUpdateHouse(house, file);
             houseDiv.find(".displayfield").show();
             houseDiv.find(".editfield").hide();
+            houseDiv.find(".notesDiv").attr("disabled", "");
+            houseDiv.find(".notesDiv").addClass("w3-hide");
         });        
     });
+
+    $(".previewimg").on("click", function(event){
+        $("#housepiclarge").attr("src", $(this).find("img").attr("src"));
+        $("#houseimage").show();
+    })
 
     $(".btnDelete").on("click", function(event){
         var houseDiv = $(this).parent().parent().parent();
@@ -57,10 +47,14 @@ function viewsHouseListInit() {
     
     $(".btnEdit").on("click", function(event){
         var houseDiv = $(this).parent().parent().parent();
+        var notesDiv = $(this).parent().parent().parent().find("#notes");
+        notesDiv.removeClass("w3-hide");
+        notesDiv.removeAttr("disabled");
         houseDiv.find(".displayfield").hide();
         houseDiv.find(".editfield").show();
     });
     
+
     $(".editimage").on("change", function(event){
         // var houseDiv = $(this).parent().parent();
         var preview = $(this).parent().parent().find("#housepic");
@@ -144,24 +138,41 @@ function showHouses() {
         });
         viewsEditlabelInit();
         viewsHouseListInit();
+        $("#newnumber").val(parseInt(houseList[houseList.length - 1].number) + 1);
     });
 }
 
 function viewsHousesAddHouse(){
+    $("#btnAddHouse").attr("disabled", "")
     var file = document.getElementById("housefile").files[0];
-    ctrlsHousesAddHouse($("#newnumber").val(), $("#newaddress").val(), file, function(newHouseDoc){
+    ctrlsHousesAddHouse($("#newnumber").val(), $("#newaddress").val(), $("#newnotes").val(), file, function(newHouseDoc){
         var newHouse = utilsFormcontrolsCloneDiv($("#tmplHouse"), newHouseDoc, "");
         newHouse.find("#numberfield").val(newHouseDoc["number"]);
         newHouse.find("#addressfield").val(newHouseDoc["address"]);
+        newHouse.find("#notesfield").val(newHouseDoc["notes"]);
+        newHouse.find("#previewimg").attr("src", newHouseDoc["image"]);
         $("#lstHouses").append(newHouse);
         viewsHouseListInit();
         viewsEditlabelInit();
+        if(newHouseDoc._attachments) {
+            dbHouses.getAttachment(newHouseDoc["_id"], "filename").then(
+                function(blob){
+                    var url = URL.createObjectURL(blob);
+                    console.log(url);
+                    newHouse.find("#housepic").attr("src", url);
+                }
+            )
+        }           
         newHouse.show();
         $("#newhouse").val("");
+        $("#newnumber").val(parseInt(newHouseDoc.number)+1);
+        $("#newaddress").val("");
+        $("#newnotes").val("");
+        $("#housepic").attr("src", "./views/cliparthouse.jpg");
+        $("#btnAddHouse").removeAttr("disabled");
+        $("#housefile").val("");
     })
 }
-
-function imageIsLoaded(e) { alert(e); }
 
 function previewFile(){
    var preview = document.getElementById('housepic'); //selects the query named img
