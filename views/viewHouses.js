@@ -148,10 +148,13 @@ function viewsHousesAddHouse(){
     var file = document.getElementById("housefile").files[0];
     ctrlsHousesAddHouse($("#newnumber").val(), $("#newaddress").val(), $("#newnotes").val(), file, function(newHouseDoc){
         var newHouse = utilsFormcontrolsCloneDiv($("#tmplHouse"), newHouseDoc, "");
+        newHouse.attr("id", "house" + newHouseDoc["_id"]);
+        newHouse.find("label").attr("for", "editimage" + newHouseDoc["_id"]);
+        newHouse.find("#editimage").attr("id", "editimage" + newHouseDoc["_id"]);        
         newHouse.find("#numberfield").val(newHouseDoc["number"]);
         newHouse.find("#addressfield").val(newHouseDoc["address"]);
         newHouse.find("#notesfield").val(newHouseDoc["notes"]);
-        newHouse.find("#previewimg").attr("src", newHouseDoc["image"]);
+        // newHouse.find("#previewimg").attr("src", newHouseDoc["image"]);
         $("#lstHouses").append(newHouse);
         viewsHouseListInit();
         viewsEditlabelInit();
