@@ -39,7 +39,8 @@ function viewsHouseListInit() {
             if (r == true) {
                 ctrlsHousesGetHouse(id, function(house){
                     ctrlsHousesDeleteHouse(house);                    
-                    houseDiv.hide();
+                    houseDiv.remove();
+                    nextNumber();
                 })                      
             }
         })
@@ -112,64 +113,65 @@ function showHouses() {
     $("#lstHouses").append(tmplHouse);
     ctrlsHousesGetHouseList(function(houseList){
         utilsFormcontrolsPopulateDivList($("#lstHouses"), houseList, tmplHouse, {
-            callback : function(div, data){
-                div.attr("id", "house" + data["_id"]);
-                div.find("label").attr("for", "editimage" + data["_id"]);
-                div.find("#editimage").attr("id", "editimage" + data["_id"]);
-                div.find("#numberfield").val(data["number"]);
-                div.find("#addressfield").val(data["address"]);
-                if(data._attachments) {
-                    dbHouses.getAttachment(data["_id"], "filename").then(
-                        function(blob){
-                            var url = URL.createObjectURL(blob);
-                            console.log(url);
-                            div.find("#housepic").attr("src", url);
-                        }
-                    )
-                }                
-                if(typeof data.notes === "object") {
-                    notestr = jsyaml.safeDump(data.notes);
-                    div.find(".notesDiv").html(notestr);
-                    div.find("#notesfield").val(notestr);
-                } else {
-                    div.find("#notesfield").val(data.notes);
-                }
-            }
+            callback : populateHouseDiv
         });
         viewsEditlabelInit();
         viewsHouseListInit();
-        if(houseList instanceof Array && houseList.length > 0)
-            $("#newnumber").val(parseInt(houseList[houseList.length - 1].number) + 1);
+        /* if(houseList instanceof Array && houseList.length > 0)
+            $("#newnumber").val(parseInt(houseList[houseList.length - 1].number) + 1); */
+        nextNumber();
     });
+}
+
+function populateHouseDiv(div, data)
+{
+    div.attr("id", "house" + data["_id"]);
+    div.find("label").attr("for", "editimage" + data["_id"]);
+    div.find("#editimage").attr("id", "editimage" + data["_id"]);
+    div.find("#numberfield").val(data["number"]);
+    div.find("#addressfield").val(data["address"]);
+    div.find("#notesfield").val(data["notes"]);
+    if(data._attachments) {
+        dbHouses.getAttachment(data["_id"], "filename").then(
+            function(blob){
+                var url = URL.createObjectURL(blob);
+                console.log(url);
+                div.find("#housepic").attr("src", url);
+            }
+        )
+    }                
+}
+
+function nextNumber()
+{
+    var hRows = $("#lstHouses").find("tr");
+    if(hRows.length > 0) {
+        $("#newnumber").val(parseInt(hRows[hRows.length-1].id.slice(-3)) + 1);
+    }
 }
 
 function viewsHousesAddHouse(){
     $("#btnAddHouse").attr("disabled", "")
     var file = document.getElementById("housefile").files[0];
     ctrlsHousesAddHouse($("#newnumber").val(), $("#newaddress").val(), $("#newnotes").val(), file, function(newHouseDoc){
+        // Populate new div
         var newHouse = utilsFormcontrolsCloneDiv($("#tmplHouse"), newHouseDoc, "");
-        newHouse.attr("id", "house" + newHouseDoc["_id"]);
-        newHouse.find("label").attr("for", "editimage" + newHouseDoc["_id"]);
-        newHouse.find("#editimage").attr("id", "editimage" + newHouseDoc["_id"]);        
-        newHouse.find("#numberfield").val(newHouseDoc["number"]);
-        newHouse.find("#addressfield").val(newHouseDoc["address"]);
-        newHouse.find("#notesfield").val(newHouseDoc["notes"]);
-        // newHouse.find("#previewimg").attr("src", newHouseDoc["image"]);
+        populateHouseDiv(newHouse, newHouseDoc);
+        
+        // Add new div to list
         $("#lstHouses").append(newHouse);
+        
+        // Connect javascript to new elements
         viewsHouseListInit();
         viewsEditlabelInit();
-        if(newHouseDoc._attachments) {
-            dbHouses.getAttachment(newHouseDoc["_id"], "filename").then(
-                function(blob){
-                    var url = URL.createObjectURL(blob);
-                    console.log(url);
-                    newHouse.find("#housepic").attr("src", url);
-                }
-            )
-        }           
+        
+        // Show new div
         newHouse.show();
+        
+        // Reset data entry form
         $("#newhouse").val("");
-        $("#newnumber").val(parseInt(newHouseDoc.number)+1);
+        // $("#newnumber").val(parseInt(newHouseDoc.number)+1);
+        nextNumber();
         $("#newaddress").val("");
         $("#newnotes").val("");
         $("#housepic").attr("src", "./views/cliparthouse.jpg");
